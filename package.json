@@ -9,7 +9,6 @@
     "start": "node ./dist/ssr/index.js",
     "dev": "npx quasar dev",
     "build": "npx quasar build -m ssr",
-    "heroku-postbuild": "yarn && yarn build",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
