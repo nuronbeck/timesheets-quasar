@@ -6,9 +6,9 @@
   "author": "Nurbek Ismoilov <nuronbeck@gmail.com>",
   "private": true,
   "scripts": {
-    "start": "node server.js",
+    "start": "node ./dist/ssr/index.js",
     "dev": "npx quasar dev",
-    "build": "npx quasar build",
+    "build": "npx quasar build -m ssr",
     "heroku-postbuild": "yarn && yarn build",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
@@ -16,11 +16,8 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
-    "connect-history-api-fallback": "^1.6.0",
     "core-js": "^3.6.5",
-    "express": "^4.17.3",
     "quasar": "^1.0.0",
-    "serve-static": "^1.14.2",
     "vue-i18n": "^8.0.0"
   },
   "devDependencies": {
