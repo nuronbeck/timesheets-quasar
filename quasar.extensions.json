@@ -1,0 +1,5 @@
+{
+  "@quasar/apollo": {
+    "graphql_uri": "http://localhost:3000/api/graphql"
+  }
+}
