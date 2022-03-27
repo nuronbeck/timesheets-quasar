@@ -31,7 +31,7 @@ module.exports = function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      // 'fontawesome-v5',
+      'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -125,6 +125,7 @@ module.exports = function (/* ctx */) {
         'Loading',
         'LocalStorage',
         'SessionStorage',
+        'Notify',
       ],
 
       cssAddon: true,
