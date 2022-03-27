@@ -1,5 +1,6 @@
 // app global css in SCSS form
 .container {
-  width: 1200px;
+  width: 100%;
+  max-width: $breakpoint-md;
   margin: 0 auto;
 }

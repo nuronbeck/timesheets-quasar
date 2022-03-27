@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Timesheets
+  <div class="container">
+    <page-heading label="Timesheets" />
   </div>
 </template>
 

@@ -1,8 +1,6 @@
 <template>
-  <div class="container q-py-sm">
-    <div class="text-h6 text-bold q-mb-sm">
-      Clients
-    </div>
+  <div class="container">
+    <page-heading label="Clients" />
 
     <div class="row q-mb-md">
       <div class="col">

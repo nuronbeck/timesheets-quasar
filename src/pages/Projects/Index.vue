@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Projects
+  <div class="container">
+    <page-heading label="Projects" />
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Time
+  <div class="container">
+    <page-heading :label="$route.path" />
   </div>
 </template>
 
