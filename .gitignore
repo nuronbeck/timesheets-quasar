@@ -2,6 +2,8 @@
 .thumbs.db
 node_modules
 .env
+/.pnp
+.pnp.js
 
 # Quasar core related directories
 .quasar
@@ -27,8 +29,20 @@ yarn-debug.log*
 yarn-error.log*
 
 # Editor directories and files
+.vscode
 .idea
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vercel
+.vercel
+
+# Local Netlify folder
+.netlify
