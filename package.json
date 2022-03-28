@@ -11,7 +11,7 @@
     "build": "npx quasar build -m ssr",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "deploy": "git subtree push — prefix dist heroku master"
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",

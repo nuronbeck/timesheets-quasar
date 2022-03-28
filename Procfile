@@ -1,1 +1,1 @@
-web: node ./ssr/index.js
+web: npm run start
