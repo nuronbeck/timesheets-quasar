@@ -6,20 +6,24 @@
   "author": "Nurbek Ismoilov <nuronbeck@gmail.com>",
   "private": true,
   "scripts": {
-    "start": "node ./dist/ssr/index.js",
+    "start": "node server.js",
     "dev": "npx quasar dev",
-    "build": "npx quasar build -m ssr",
+    "build": "npx quasar build",
+    "build-ssr": "npx quasar build -m ssr",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm install && npm run build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
+    "connect-history-api-fallback": "^1.6.0",
     "core-js": "^3.6.5",
     "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "firebase": "^9.6.10",
     "quasar": "^1.0.0",
+    "serve-static": "^1.15.0",
     "vue-i18n": "^8.0.0"
   },
   "devDependencies": {
