@@ -30,24 +30,14 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 export default {
   name: 'Login',
   methods: {
-    ...mapMutations({
-      SET_AUTH_USER: 'auth/SET_AUTH_USER',
-      SET_AUTH_TOKEN: 'auth/SET_AUTH_TOKEN',
-    }),
-
     login() {
       signInWithPopup(getAuth(), new GoogleAuthProvider())
-        .then((/* res */) => {
-          // const { user, _tokenResponse } = res;
-          // this.SET_AUTH_USER(user);
-          // this.SET_AUTH_TOKEN(_tokenResponse);
-
+        .then(() => {
           this.$q.notify({
             type: 'positive',
             message: 'Congratulations! You are logged in!',

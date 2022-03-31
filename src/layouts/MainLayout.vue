@@ -4,6 +4,7 @@
 
     <q-page-container>
       <q-page class="q-py-sm q-py-md-md">
+
           <router-view />
 
           <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">

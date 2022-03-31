@@ -1,0 +1,27 @@
+query Clients($pagination: pagination, $filters: clientFilters) {
+  clients: getClients(pagination: $pagination, filters: $filters) {
+    data {
+      id
+      name
+      description
+      projects {
+        id
+        name
+        description
+        spent
+        budget
+        status
+        activities {
+          id
+          name
+        }
+      }
+    }
+    pagination {
+      size
+      after
+      before
+      total
+    }
+  }
+}

@@ -37,7 +37,7 @@
                   <q-item-section>Settings</q-item-section>
                 </q-item>
                 <q-separator />
-                <q-item clickable >
+                <q-item clickable @click="logout">
                   <q-item-section>Logout</q-item-section>
                 </q-item>
               </q-list>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { getAuth, signOut } from 'firebase/auth';
 import { desktopLinks } from '@constants/headerMenuLinks';
 
 export default {
@@ -58,6 +59,24 @@ export default {
     return {
       desktopLinks,
     };
+  },
+  methods: {
+    logout() {
+      signOut(getAuth());
+      this.$router.push('/')
+        .then(() => {
+          this.$q.notify({
+            type: 'positive',
+            message: 'Sign Out Success.',
+          });
+        })
+        .catch((error) => {
+          this.$q.notify({
+            type: 'negative',
+            message: `Error sign out! ${error}`,
+          });
+        });
+    },
   },
 };
 </script>

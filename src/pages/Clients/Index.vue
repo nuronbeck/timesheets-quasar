@@ -1,95 +1,108 @@
 <template>
   <div class="container">
+    <dashboard-breadcrumbs :breadcrumbs="this.$route.meta.breadcrumbs" />
+
     <page-heading label="Clients" />
 
     <div class="row q-mb-md">
       <div class="col">
-        <q-btn color="green-7" icon="add" label="Добавить" align="between" size="md" unelevated no-caps />
+        <q-btn color="green-7" icon="add" label="Добавить" align="between" size="md" unelevated no-caps to="/dashboard/clients/add" />
+      </div>
+
+      <div class="col-auto">
+        <q-input
+          v-model="filters.clientName"
+          debounce="800"
+          placeholder="Search"
+          hint="Enter client name"
+          filled
+          dense
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </div>
     </div>
 
-    <q-list bordered>
-      <q-item v-for="contact in contacts" :key="contact.id" class="q-my-sm" clickable v-ripple>
-        <q-item-section avatar>
-          <q-avatar color="warning" text-color="white">
-            {{ contact.letter }}
-          </q-avatar>
-        </q-item-section>
+      <ApolloQuery
+        :query="require('@apollo/queries/getClients.gql')"
+        :variables="{ pagination, filters }"
+        fetchPolicy="network-only"
+      >
+        <template v-slot="{ result: { error, data }, isLoading }">
 
-        <q-item-section>
-          <q-item-label>{{ contact.name }}</q-item-label>
-          <q-item-label caption lines="1">{{ contact.email }}</q-item-label>
-        </q-item-section>
+          <q-list v-if="isLoading" bordered>
+            <q-item v-for="(i, ind) in 10" :key="`list-clients-skeleton__${ind}`">
+              <q-item-section avatar>
+                <q-skeleton type="QAvatar" />
+              </q-item-section>
 
-        <q-item-section side>
-          <q-icon name="chat_bubble" color="green" />
-        </q-item-section>
-      </q-item>
+              <q-item-section>
+                <q-item-label>
+                  <q-skeleton type="text" width="25%" />
+                </q-item-label>
+                <q-item-label caption>
+                  <q-skeleton type="text" />
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
 
-      <q-separator />
-      <q-item-label header>Offline</q-item-label>
+          <!-- Error -->
+          <div v-if="error" class="error apollo">
+            An error occurred
+          </div>
 
-      <q-item v-for="contact in offline" :key="contact.id" class="q-mb-sm" clickable v-ripple>
-        <q-item-section avatar>
-          <q-avatar>
-            <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`">
-          </q-avatar>
-        </q-item-section>
+          <q-list v-if="data && !isLoading" bordered>
+            <q-intersection
+              v-for="client in data.clients.data"
+              :key="client.id"
+              once
+              transition="jump-up"
+            >
+              <q-item
+                class="q-my-sm"
+                clickable
+                v-ripple
+              >
+                <q-item-section avatar>
+                  <q-avatar color="warning" text-color="white">
+                    {{ client.letter }}
+                  </q-avatar>
+                </q-item-section>
 
-        <q-item-section>
-          <q-item-label>{{ contact.name }}</q-item-label>
-          <q-item-label caption lines="1">{{ contact.email }}</q-item-label>
-        </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ client.name }}</q-item-label>
+                  <q-item-label caption lines="1">{{ client.email }}</q-item-label>
+                </q-item-section>
 
-        <q-item-section side>
-          <q-icon name="chat_bubble" color="grey" />
-        </q-item-section>
-      </q-item>
-    </q-list>
+                <q-item-section side>
+                  <q-icon name="chat_bubble" color="green" />
+                </q-item-section>
+              </q-item>
+            </q-intersection>
+          </q-list>
+
+        </template>
+      </ApolloQuery>
+
   </div>
 </template>
 
 <script>
-const contacts = [{
-  id: 1,
-  name: 'Ruddy Jedrzej',
-  email: 'rjedrzej0@discuz.net',
-  letter: 'R',
-}, {
-  id: 2,
-  name: 'Mallorie Alessandrini',
-  email: 'malessandrini1@marketwatch.com',
-  letter: 'M',
-}, {
-  id: 3,
-  name: 'Elisabetta Wicklen',
-  email: 'ewicklen2@microsoft.com',
-  letter: 'E',
-}, {
-  id: 4,
-  name: 'Seka Fawdrey',
-  email: 'sfawdrey3@wired.com',
-  letter: 'S',
-}];
-
-const offline = [{
-  id: 5,
-  name: 'Brunhilde Panswick',
-  email: 'bpanswick4@csmonitor.com',
-  avatar: 'avatar2.jpg',
-}, {
-  id: 6,
-  name: 'Winfield Stapforth',
-  email: 'wstapforth5@pcworld.com',
-  avatar: 'avatar6.jpg',
-}];
-
 export default {
   name: 'Clients',
   data() {
     return {
-      contacts,
-      offline,
+      pagination: {
+        size: 10,
+      },
+      filters: {
+        projectStatus: 'ACTIVE',
+        clientName: '',
+        projectName: '',
+      },
     };
   },
 };

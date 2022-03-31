@@ -70,6 +70,9 @@ module.exports = function (/* ctx */) {
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }]);
 
         chain.resolve.alias
+          .set('@apollo', path.resolve(__dirname, './src/apollo'));
+
+        chain.resolve.alias
           .set('@assets', path.resolve(__dirname, './src/assets'));
 
         chain.resolve.alias
@@ -89,6 +92,25 @@ module.exports = function (/* ctx */) {
 
         chain.resolve.alias
           .set('@pages', path.resolve(__dirname, './src/pages'));
+
+        chain.module
+          .rule('vue')
+          .use('vue-loader')
+          .loader('vue-loader')
+          .tap((options) => {
+            options.transpileOptions = {
+              transforms: {
+                dangerousTaggedTemplateString: true,
+              },
+            };
+            return options;
+          });
+
+        chain.module
+          .rule('gql')
+          .test(/\.(graphql|gql)$/)
+          .use('graphql-tag/loader')
+          .loader('graphql-tag/loader');
       },
     },
 
@@ -131,9 +153,9 @@ module.exports = function (/* ctx */) {
       cssAddon: true,
     },
 
-    // animations: 'all', // --- includes all animations
+    animations: 'all', // --- includes all animations
     // https://v1.quasar.dev/options/animations
-    animations: [],
+    // animations: [],
 
     // https://v1.quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -234,6 +256,12 @@ module.exports = function (/* ctx */) {
             };
             return options;
           });
+
+        chain.module
+          .rule('gql')
+          .test(/\.(graphql|gql)$/)
+          .use('graphql-tag/loader')
+          .loader('graphql-tag/loader');
       },
     },
   };

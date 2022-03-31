@@ -8,25 +8,28 @@
       "app/*": [
         "*"
       ],
-      "@/assets/*": [
+      "@apollo/*": [
+        "src/apollo/*"
+      ],
+      "@assets/*": [
         "src/assets/*"
       ],
-      "@/boot/*": [
+      "@boot/*": [
         "src/boot/*"
       ],
-      "@/components/*": [
+      "@components/*": [
         "src/components/*"
       ],
-      "@/constants/*": [
+      "@constants/*": [
         "src/constants/*"
       ],
-      "@/i18n/*": [
+      "@i18n/*": [
         "src/i18n/*"
       ],
-      "@/layouts/*": [
+      "@layouts/*": [
         "src/layouts/*"
       ],
-      "@/pages/*": [
+      "@pages/*": [
         "src/pages/*"
       ],
       "vue$": [

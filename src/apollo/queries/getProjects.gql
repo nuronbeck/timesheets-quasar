@@ -1,0 +1,42 @@
+query Projects($pagination: pagination, $filters: projectsFilters) {
+  projects: getProjects(pagination: $pagination, filters: $filters) {
+    data {
+      id
+      name
+      description
+      budget
+      spent
+      status
+      client {
+        id
+        name
+        description
+      }
+      activities {
+        id
+        name
+        costs
+        duration
+      }
+      memberships {
+        id
+        user {
+          id
+          firstName
+          lastName
+        }
+        role
+        startDate
+        endDate
+      }
+      startDate
+      endDate
+    }
+    pagination {
+      size
+      after
+      before
+      total
+    }
+  }
+}
