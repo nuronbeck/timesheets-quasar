@@ -12,17 +12,21 @@
           </q-page-scroller>
         </q-page>
     </q-page-container>
+
+    <DashboardLeftMenu />
   </q-layout>
 </template>
 
 <script>
 import { desktopLinks } from '@constants/headerMenuLinks';
 import DashboardHeader from '@components/Dashboard/DashboardHeader.vue';
+import DashboardLeftMenu from '@components/Dashboard/DashboardLeftMenu.vue';
 
 export default {
   name: 'MyLayout',
   components: {
     DashboardHeader,
+    DashboardLeftMenu,
   },
   data() {
     return {

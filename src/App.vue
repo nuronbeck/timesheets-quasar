@@ -25,9 +25,11 @@ export default {
     onAuthStateChanged(getAuth(), (authData) => {
       if (authData) {
         const {
-          uid, email, photoURL, stsTokenManager: { accessToken, expirationTime, refreshToken } = {},
+          uid, email, photoURL, displayName, stsTokenManager: { accessToken, expirationTime, refreshToken } = {},
         } = authData;
-        this.SET_AUTH_USER({ uid, email, photoURL });
+        this.SET_AUTH_USER({
+          uid, email, photoURL, displayName,
+        });
         this.SET_AUTH_TOKEN({ accessToken, expirationTime, refreshToken });
       } else {
         this.SET_AUTH_USER(null);

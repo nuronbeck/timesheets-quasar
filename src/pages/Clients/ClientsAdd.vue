@@ -2,12 +2,14 @@
   <div class="container">
     <dashboard-breadcrumbs :breadcrumbs="this.$route.meta.breadcrumbs" />
 
-    <page-heading label="Add client" />
+    <div class="q-pa-md q-pa-lg-lg q-mb-lg bg-white rounded-borders">
+      <page-heading label="Add client" />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AddClient',
+  name: 'ClientsAdd',
 };
 </script>

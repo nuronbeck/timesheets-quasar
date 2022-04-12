@@ -1,5 +1,5 @@
 <template>
-  <q-breadcrumbs class="q-pa-md q-pa-lg-lg q-mb-lg text-grey-7 bg-white rounded-borders" active-color="accent">
+  <q-breadcrumbs class="q-pa-md q-pa-lg-lg q-mb-md text-grey-7 bg-white rounded-borders" active-color="accent">
     <template v-slot:separator>
         <q-icon
           size="1.5em"
@@ -11,7 +11,7 @@
     <template v-for="breadCrumbsItem in breadcrumbsLocaled">
       <q-breadcrumbs-el
         :key="`breadCrumbsItem__${breadCrumbsItem.id}`"
-        :label="$t(breadCrumbsItem.label)"
+        :label="breadCrumbsItem.label"
         :icon="breadCrumbsItem.icon"
         :to="breadCrumbsItem.to"
       />

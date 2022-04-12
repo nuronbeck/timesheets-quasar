@@ -14,9 +14,20 @@ export default {
   },
 
   getters: {
+    userPhotoUrl: (state) => {
+      const { user } = state;
+      if (user !== null && typeof 'object') {
+        const { photoURL } = user;
+
+        return photoURL;
+      }
+
+      return null;
+    },
+    user: ({ user }) => user,
     isLoggedIn: (state) => {
       const { user } = state;
-      return !!user && (typeof user === 'object') && Object.keys(user).length;
+      return !!user && (typeof user === 'object') && Object.keys(user).length > 0;
     },
   },
 

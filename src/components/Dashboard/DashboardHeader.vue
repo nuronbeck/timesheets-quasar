@@ -1,15 +1,24 @@
 <template>
-  <q-header class="dashboard-header text-white">
+  <q-header class="dashboard-header text-white bg-accent">
     <div class="container">
       <div class="dashboard-header__inner flex items-center justify-between">
         <div class="dashboard-header__navigation">
+          <q-btn
+            flat
+            aria-label="Menu"
+            icon="menu"
+            class="dashboard-header__navigation-link q-mr-sm lt-sm"
+            @click="SET_SHOW_LEFT_MENU(!showLeftMenu)"
+          />
+
           <template v-for="desktopLink in desktopLinks" >
             <q-btn
               :label="desktopLink.label"
               :key="`header-desktop-link__${desktopLink.key}`"
+              :icon="desktopLink.icon"
               :to="desktopLink.link"
-              class="dashboard-header__navigation-link"
-              :class="{ active: $route.path === desktopLink.link }"
+              class="dashboard-header__navigation-link gt-xs"
+              :class="{ active: isRouteActivePath(desktopLink.link) }"
               flat
               text-color="white"
               no-caps
@@ -19,10 +28,25 @@
 
         <div class="dashboard-header__account">
           <q-btn class="dashboard-header__account-dropdown" flat no-wrap>
-            <q-avatar rounded size="30px">
-              <img src="https://cdn.quasar.dev/img/avatar3.jpg">
-            </q-avatar>
-            <strong class="q-pl-sm dashboard-header__account-name">Nurbek Ismoilov</strong>
+            <q-no-ssr>
+              <q-avatar
+                :color="userPhotoUrl ? undefined : 'grey-9'"
+                :text-color="userPhotoUrl ? undefined : 'white'"
+                size="30px"
+                rounded
+              >
+                <span v-if="!userPhotoUrl">N</span>
+                <img v-else :src="userPhotoUrl" />
+              </q-avatar>
+            </q-no-ssr>
+
+            <q-no-ssr>
+              <strong class="q-pl-sm dashboard-header__account-name">
+                <span v-if="isLoggedIn && user">
+                  {{ user.displayName }}
+                </span>
+              </strong>
+            </q-no-ssr>
             <q-icon name="arrow_drop_down" size="16px" />
 
             <q-menu fit auto-close>
@@ -50,6 +74,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 import { getAuth, signOut } from 'firebase/auth';
 import { desktopLinks } from '@constants/headerMenuLinks';
 
@@ -60,7 +85,30 @@ export default {
       desktopLinks,
     };
   },
+  computed: {
+    isRouteActivePath() {
+      return (path) => {
+        const currentPath = this.$route.path;
+        if (path === '/dashboard' && currentPath === '/dashboard') {
+          return true;
+        }
+
+        const [, currentChildPath] = currentPath.replace('/dashboard', '').split('/');
+        const [, dashboardChildPath] = path.replace('/dashboard', '').split('/');
+        return currentChildPath === dashboardChildPath;
+      };
+    },
+    ...mapGetters({
+      showLeftMenu: 'ui/showLeftMenu',
+      isLoggedIn: 'auth/isLoggedIn',
+      user: 'auth/user',
+      userPhotoUrl: 'auth/userPhotoUrl',
+    }),
+  },
   methods: {
+    ...mapMutations({
+      SET_SHOW_LEFT_MENU: 'ui/SET_SHOW_LEFT_MENU',
+    }),
     logout() {
       signOut(getAuth());
       this.$router.push('/')
@@ -83,7 +131,6 @@ export default {
 
 <style lang="scss">
 .dashboard-header {
-  background: $accent;
 
   &__navigation,
   &__navigation-link,
@@ -97,12 +144,8 @@ export default {
 
     &.active {
       background: rgba(255,255,255, .15);
-      border-bottom: 2px solid #fff;
+      border-bottom: 2px solid $primary;
     }
-  }
-
-  &__account-dropdown {
-
   }
 
   &__account-name {

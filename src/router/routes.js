@@ -22,18 +22,83 @@ const routes = [
   {
     path: '/dashboard',
     component: () => import('@layouts/MainLayout.vue'),
+    meta: {
+      requireAuth: true,
+    },
     children: [
       {
         path: '',
-        component: () => import('@pages/Home/Index.vue'),
+        component: () => import('@pages/Dashboard/DashboardIndex.vue'),
+        meta: {
+          breadcrumbs: [
+            {
+              id: 'dashboardIndex',
+              label: 'Dashboard',
+              icon: 'home',
+              to: '/dashboard',
+            },
+          ],
+        },
+      },
+      {
+        path: 'time',
+        component: () => import('@pages/Times/TimesIndex.vue'),
+        meta: {
+          breadcrumbs: [
+            {
+              id: 'dashboardIndex',
+              label: 'Dashboard',
+              icon: 'home',
+              to: '/dashboard',
+            },
+            {
+              id: 'timesIndex',
+              label: 'Time',
+              icon: undefined,
+              to: undefined,
+            },
+          ],
+        },
       },
       {
         path: 'projects',
-        component: () => import('@pages/Projects/Index.vue'),
+        component: () => import('@pages/Projects/ProjectsIndex.vue'),
+        meta: {
+          breadcrumbs: [
+            {
+              id: 'dashboardIndex',
+              label: 'Dashboard',
+              icon: 'home',
+              to: '/dashboard',
+            },
+            {
+              id: 'projectsListIndex',
+              label: 'Projects',
+              icon: undefined,
+              to: undefined,
+            },
+          ],
+        },
       },
       {
         path: 'timesheets',
-        component: () => import('@pages/Timesheets/Index.vue'),
+        component: () => import('@pages/Timesheets/TimesheetsIndex.vue'),
+        meta: {
+          breadcrumbs: [
+            {
+              id: 'dashboardIndex',
+              label: 'Dashboard',
+              icon: 'home',
+              to: '/dashboard',
+            },
+            {
+              id: 'timesheetsListIndex',
+              label: 'Timesheets',
+              icon: undefined,
+              to: undefined,
+            },
+          ],
+        },
       },
       {
         path: 'clients',
@@ -41,7 +106,7 @@ const routes = [
         children: [
           {
             path: '',
-            component: () => import('@pages/Clients/Index.vue'),
+            component: () => import('@pages/Clients/ClientsIndex.vue'),
             meta: {
               breadcrumbs: [
                 {
@@ -61,7 +126,7 @@ const routes = [
           },
           {
             path: 'add',
-            component: () => import('@pages/Clients/AddClient.vue'),
+            component: () => import('@pages/Clients/ClientsAdd.vue'),
             meta: {
               breadcrumbs: [
                 {
@@ -69,6 +134,12 @@ const routes = [
                   label: 'Dashboard',
                   icon: 'home',
                   to: '/dashboard',
+                },
+                {
+                  id: 'clientsListIndex',
+                  label: 'Clients',
+                  icon: undefined,
+                  to: '/dashboard/clients',
                 },
                 {
                   id: 'clientsAddIndex',

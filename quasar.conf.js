@@ -22,7 +22,13 @@ module.exports = function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v1.quasar.dev/quasar-cli/boot-files
-    boot: ['global-components', 'firebase', 'i18n', 'axios'],
+    boot: [
+      'global-components',
+      'firebase',
+      { path: 'vuex-persistedstate.js', server: false },
+      'i18n',
+      'axios',
+    ],
 
     // https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
