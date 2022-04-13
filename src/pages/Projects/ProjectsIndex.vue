@@ -22,19 +22,19 @@
             :variables="{ pagination, filters }"
             fetchPolicy="network-only"
           >
-            <template v-slot="{ result: { loading, error, data } }">
+            <template v-slot="{ result: { error, data }, isLoading }">
               <!-- Loading -->
-              <div v-if="loading" class="loading apollo">
-                Loading...
-              </div>
+              <q-inner-loading :showing="!!isLoading">
+                <q-spinner-clock size="lg" color="accent" />
+              </q-inner-loading>
 
               <!-- Error -->
-              <div v-if="error" class="error apollo">
+              <div v-if="error && !isLoading" class="error apollo">
                 An error occurred
               </div>
 
               <!-- Result -->
-              <div v-if="data" class="result apollo">
+              <div v-if="data && !isLoading" class="result apollo">
                 <q-item v-for="item in data.projects.data" :key="item.id" class="q-my-sm" clickable v-ripple>
                     <q-item-section avatar>
                       <q-avatar color="warning" text-color="white">

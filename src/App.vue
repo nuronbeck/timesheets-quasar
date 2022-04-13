@@ -31,9 +31,11 @@ export default {
           uid, email, photoURL, displayName,
         });
         this.SET_AUTH_TOKEN({ accessToken, expirationTime, refreshToken });
+        this.$q.localStorage.set('firebaseAccessToken', accessToken);
       } else {
         this.SET_AUTH_USER(null);
         this.SET_AUTH_TOKEN(null);
+        this.$q.localStorage.remove('firebaseAccessToken');
       }
     });
   },

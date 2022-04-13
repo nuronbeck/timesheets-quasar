@@ -14,6 +14,7 @@ export default {
   },
 
   getters: {
+    accessToken: (state) => state?.tokenResponse?.accessToken,
     userPhotoUrl: (state) => {
       const { user } = state;
       if (user !== null && typeof 'object') {

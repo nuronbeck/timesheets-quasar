@@ -4,23 +4,37 @@
 
     <div class="q-pa-md q-pa-lg-lg q-mb-lg bg-white rounded-borders">
       <div class="row">
-        <div class="col-auto q-pr-xs">
-          <q-btn color="grey-5" icon="fas fa-chevron-left"  @click="onPrev" unelevated outline />
-        </div>
-        <div class="col-auto q-pr-xs">
-          <q-btn color="grey-5" icon="fas fa-chevron-right" @click="onNext" unelevated outline />
+        <div class="col-2 q-pr-lg">
+          <div class="row">
+            <div class="col q-pr-xs">
+              <q-btn class="full-width" color="grey-6" icon="fas fa-chevron-left"  @click="onPrev" unelevated outline dense />
+            </div>
+            <div class="col">
+              <q-btn class="full-width" color="grey-6" icon="fas fa-chevron-right" @click="onNext" unelevated outline dense />
+            </div>
+          </div>
         </div>
         <div class="col q-pl-md">
-          <page-heading :label="`${weekdayFormatter(today, false)}, ${dayFormatter(today, true)} ${monthFormatter(today, false)}`" />
-        </div>
-        <div class="col-auto">
-          <q-btn color="green-7" icon="add" align="between" size="md" unelevated no-caps />
+          <page-heading class="text-capitalize" :label="`${weekdayFormatter(today, false)}, ${dayFormatter(today, true)} ${monthFormatter(today, false)}`" />
         </div>
       </div>
 
-      <div class="row">
+      <div class="row q-mb-md">
+        <div class="col-2 q-pr-lg">
+          <q-btn
+            class="new-item-btn full-width"
+            color="green-6"
+            icon="add"
+            align="center"
+            size="lg"
+            unelevated
+            no-caps
+            @click="newTimeEntry.isVisible = true"
+          />
+        </div>
+
         <div class="col">
-          <div class="title-bar row items-center overflow-hidden">
+          <div class="title-bar row items-center overflow-hidden rounded-borders">
             <transition-group
               class="full-width"
               :enter-active-class="`animated ${transition}`"
@@ -28,11 +42,18 @@
               appear
             >
               <div :key="parsedStart.date" class="full-width row justify-between items-center text-white overflow-hidden">
-                <div v-for="day in days" :key="day.date" class="col">
-                  <q-btn flat class="full-width" :class="dayClass(day)" style="line-height: unset; color: black;" @click="selectedDate = day.date; transition = ''">
-                    <div class="text-center" style="width: 100%;">{{ monthFormatter(day, true) }}</div>
-                    <div class="text-center text-bold" style="width: 100%;  font-size: 16px;">{{ dayFormatter(day, false) }}</div>
-                    <div class="text-center" style="width: 100%; font-size: 10px;">{{ weekdayFormatter(day, true) }}</div>
+                <div v-for="day in days" :key="day.date" class="date-navigator__items col">
+                  <q-btn
+                    class="date-navigator__item full-width text-black"
+                    :class="dayClass(day)"
+                    flat
+                    dense
+                    @click="selectedDate = day.date; transition = ''"
+                  >
+                    <div class="text-center text-capitalize">{{ weekdayFormatter(day, true) }}</div>
+                    <div class="full-width text-center text-capitalize">
+                      {{ dayFormatter(day, false) }} {{ monthFormatter(day, true) }}
+                    </div>
                   </q-btn>
                 </div>
               </div>
@@ -41,13 +62,60 @@
         </div>
       </div>
 
+      <div class="row bg-grey-1 rounded-borders">
+        <div class="col-12">
+          <q-no-ssr>
+            <ApolloQuery
+              :query="require('@apollo/queries/getTimesheetWeek.gql')"
+              :variables="{ date: new Date().toISOString() }"
+              fetchPolicy="network-only"
+            >
+
+              <template v-slot="{ result: { error, data }, isLoading }">
+                <!-- Loading -->
+                <q-inner-loading :showing="!!isLoading">
+                  <q-spinner-clock size="lg" color="accent" />
+                </q-inner-loading>
+
+                <!-- Error -->
+                <div v-if="error && !isLoading" class="error apollo">
+                  An error occurred
+                </div>
+
+                <!-- Result -->
+                <div v-if="data && !isLoading" class="result apollo">
+                  <div v-if="data.timesheet">
+                    <q-item v-for="timeItem in data.timesheet.timeItems" :key="timeItem.id" class="q-my-sm">
+                      <q-item-section avatar>
+                        {{ timeItem.date }}
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label>duration: {{ timeItem.duration }}</q-item-label>
+                        <q-item-label caption lines="1">{{ timeItem.project.name }}</q-item-label>
+                      </q-item-section>
+
+                      <q-item-section side>
+                        <q-icon name="account" color="green" />
+                      </q-item-section>
+                    </q-item>
+                  </div>
+                </div>
+              </template>
+            </ApolloQuery>
+          </q-no-ssr>
+        </div>
+      </div>
     </div>
+
+    <ModalNewTimeEntry :visible="newTimeEntry.isVisible" />
   </div>
 </template>
 
 <script>
 // normally you would not import "all" of QCalendar, but is needed for this example to work with UMD (codepen)
 import QCalendar from '@quasar/quasar-ui-qcalendar'; // ui is aliased from '@quasar/quasar-ui-qcalendar'
+import ModalNewTimeEntry from '@components/Modals/ModalNewTimeEntry';
 
 const CURRENT_DAY = new Date();
 
@@ -60,6 +128,9 @@ function getCurrentDay(day) {
 
 export default {
   name: 'TimesIndex',
+  components: {
+    ModalNewTimeEntry,
+  },
   data() {
     return {
       selectedDate: getCurrentDay(CURRENT_DAY.getDate()),
@@ -68,12 +139,24 @@ export default {
       monthFormatter: this.monthFormatterFunc(),
       dayFormatter: this.dayFormatterFunc(),
       weekdayFormatter: this.weekdayFormatterFunc(),
-      transitionPrev: 'slideInRight',
-      transitionNext: 'slideInLeft',
+      transitionPrev: 'slideInLeft',
+      transitionNext: 'slideInRight',
       transition: '',
+
+      // Apollo variables
+      pagination: {
+        size: 10,
+      },
+
+      filters: {
+        status: 'ACTIVE',
+        name: '',
+      },
+
+      newTimeEntry: {
+        isVisible: false,
+      },
     };
-  },
-  beforeMounted() {
   },
 
   computed: {
@@ -130,7 +213,7 @@ export default {
       return {
         row: true,
         'justify-center': true,
-        'selected-date': this.selectedDate === day.date,
+        active: this.selectedDate === day.date,
       };
     },
 
@@ -170,11 +253,8 @@ export default {
 <style lang="scss" scoped>
 .title-bar {
   width: 100%;
-  height: 70px;
-  background-color: white;
-  display: flex;
-  flex-direction: row;
-  flex: 1;
+  max-height: 57px;
+  border: 1px solid $grey-5;
 }
 
 .direction-button {
@@ -183,8 +263,29 @@ export default {
   z-index: 20;
 }
 
-.selected-date {
-  color: $accent !important;
-  background: $grey-3 !important;
+.new-item-btn {
+  height: 57px;
+}
+
+.date-navigator {
+  &__items {
+    &:nth-last-child(1){
+      .date-navigator__item {
+        border-right-width: 0px;
+      }
+    }
+  }
+
+  &__item {
+    font-size: 13px;
+    overflow-y: hidden;
+    border-right: 1px solid $grey-5;
+    border-bottom: 3px solid transparent;
+
+    &.active {
+      background: $grey-3;
+      border-bottom: 3px solid $green;
+    }
+  }
 }
 </style>

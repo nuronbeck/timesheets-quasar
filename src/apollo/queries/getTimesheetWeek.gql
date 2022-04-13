@@ -1,0 +1,33 @@
+query GetTimesheetWeek($date: Date!) {
+  timesheet: getTimesheetWeek(date: $date) {
+    id
+    user {
+      id
+      firstName
+      lastName
+    }
+    startDate
+    endDate
+    status
+    timeItems {
+      id
+      duration
+      date
+      project {
+        id
+        name
+        description
+        status
+        client {
+          id
+          name
+        }
+      }
+      activity {
+        id
+        name
+        costs
+      }
+    }
+  }
+}

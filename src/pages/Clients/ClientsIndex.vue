@@ -34,25 +34,12 @@
         >
           <template v-slot="{ result: { error, data }, isLoading }">
 
-            <q-list v-if="isLoading" bordered>
-              <q-item v-for="(i, ind) in 10" :key="`list-clients-skeleton__${ind}`">
-                <q-item-section avatar>
-                  <q-skeleton type="QAvatar" size="40px" />
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label>
-                    <q-skeleton type="text" width="25%" />
-                  </q-item-label>
-                  <q-item-label caption>
-                    <q-skeleton type="text" />
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
+            <q-inner-loading :showing="!!isLoading">
+              <q-spinner-clock size="lg" color="accent" />
+            </q-inner-loading>
 
             <!-- Error -->
-            <div v-if="error" class="error apollo">
+            <div v-if="error && !isLoading" class="error apollo">
               An error occurred
             </div>
 

@@ -1,3 +1,5 @@
+import { LocalStorage } from 'quasar';
+
 export default async function (/* { app, router, store, ssrContext, urlPath, redirect } */) {
   return {
     default: {
@@ -8,6 +10,7 @@ export default async function (/* { app, router, store, ssrContext, urlPath, red
         // running quasar commands, for example:
         // `GRAPHQL_URI=https://prod.example.com/graphql quasar build`
         // `GRAPHQL_URI=https://dev.example.com/graphql quasar dev`
+        headers: { Authorization: LocalStorage.getItem('firebaseAccessToken') },
         uri: process.env.GRAPHQL_URI || 'http://localhost:3000/api/graphql',
       },
 
