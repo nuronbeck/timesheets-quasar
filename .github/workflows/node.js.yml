@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: SSH Remote Commands
       # You may pin to the exact commit or the version.
@@ -23,6 +23,7 @@ jobs:
         host: ${{ secrets.ORACLE_CLOUD_SSH_IP }}
         password: ${{ secrets.ORACLE_CLOUD_SSH_PASSWORD }}
         script: |
+          source ~/.bashrc
           pm2 kill
           cd ~/timesheets-quasar
           git pull
