@@ -23,7 +23,7 @@ jobs:
         host: ${{ secrets.ORACLE_CLOUD_SSH_IP }}
         password: ${{ secrets.ORACLE_CLOUD_SSH_PASSWORD }}
         script: |
-          source ~/.bashrc
+          source ~/.nvm/nvm.sh
           pm2 kill
           cd ~/timesheets-quasar
           git pull
