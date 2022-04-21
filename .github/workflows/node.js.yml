@@ -16,8 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        node-version: "14.16.0"
 
     steps:
     - uses: actions/checkout@v3
@@ -25,6 +24,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+    - run: yarn
+    - run: yarn build-ssr --if-present
     - name: SSH Remote Commands
       # You may pin to the exact commit or the version.
       # uses: appleboy/ssh-action@1d1b21ca96111b1eb4c03c21c14ebb971d2200f6
