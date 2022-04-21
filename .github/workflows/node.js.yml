@@ -26,6 +26,7 @@ jobs:
           source ~/.nvm/nvm.sh
           pm2 kill
           cd ~/timesheets-quasar
+          nvm use
           git pull
           rm -rf dist
           yarn
