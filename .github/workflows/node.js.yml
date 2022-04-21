@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run build-ssr --if-present
+    - run: npm run build --if-present
     - name: SSH Remote Commands
       # You may pin to the exact commit or the version.
       # uses: appleboy/ssh-action@1d1b21ca96111b1eb4c03c21c14ebb971d2200f6
@@ -40,7 +40,9 @@ jobs:
           pm2 kill
           cd ~/timesheets-quasar
           git pull
+          rm -rf dist
           yarn
+          yarn build-ssr
           pm2 start ./dist/ssr/index.js
           pm2 save
           pm2 startup
